@@ -1,18 +1,17 @@
-# base image
-FROM node:14-alpine 
+# Use an official Node.js runtime as a parent image
+FROM node:14
 
-# set working directory
+# Set the working directory to /app
 WORKDIR /app
 
-# add `/app/node_modules/.bin` to $PATH
-ENV PATH /app/node_modules/.bin:$PATH
+# Copy the current directory contents into the container at /app
+COPY . /app
 
-# install and cache app dependencies
-COPY client/package.json /app/package.json
-RUN npm install --silent
-RUN npm install react-scripts@4.0.3 -g --silent
+# Install any needed packages specified in package.json
+RUN npm install
 
-# start app
-COPY client/public /app/public
-COPY client/src /app/src
+# Make port 5000 available to the world outside this container
+EXPOSE 5000
+
+# Start the app when the container launches
 CMD ["npm", "start"]
